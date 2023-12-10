@@ -1,5 +1,16 @@
 {
   "devDependencies": {
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
+  },
+  "name": "PETApi",
+  "version": "1.0.0",
+  "description": "PETSIMC's Database API",
+  "main": "index.js",
+  "repository": "https://github.com/ImNotPETSIMC/PETApi",
+  "author": "Enzo Weder",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev src/app.ts"
   }
 }
