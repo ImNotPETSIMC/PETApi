@@ -1,13 +1,9 @@
-import express from 'express';
+import * as dotenv from "dotenv";
+import app from "./app";
 
-const app = express();
+dotenv.config();
 
-app.use(express.json());
+const port = process.env.PORT;
+const server = app.listen(port);
 
-app.get('/', (req, res) => {
-    return res.send("⚙️ PETAPI ⚙️");
-});
-
-app.listen(3000, () => {
-    console.log("⚙️ PETAPI - Listening at http://localhost:3000");
-});
+server.on("listening", () => console.log("⚙️ PETAPI - Listening at http://localhost:"+ port));
