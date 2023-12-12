@@ -8,13 +8,13 @@ export class MembersController {
 
     const { data } = req.body;
 
-    if (!data) {
+    if (!data || !data.matricula) {
       res.status(422).send({ error: "Missing some fields." });
       return;
     }
 
     try {
-      const member = await memberService.search(data);
+      const member = await memberService.search(data.matricula);
 
       res.status(200).send(member);
 
