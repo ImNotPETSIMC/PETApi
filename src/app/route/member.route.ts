@@ -5,7 +5,7 @@ const memberRouter = Router();
 
 const memberController = new MembersController();
 
-memberRouter.get("/search", memberController.member);
-memberRouter.get("/show", memberController.members);
+memberRouter.get("/search", memberController.search);
+memberRouter.get("/show", memberController.show);
 
 export { memberRouter };
