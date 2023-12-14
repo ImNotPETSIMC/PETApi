@@ -5,7 +5,7 @@ import { ValidationExceptionError } from "../exception/validation.exception";
 
 export default class MemberService {
     public async search(matricula: string) {
-        const requestRef = {matricula: normalizeString(matricula, "matricula")}
+        const requestRef = { matricula: normalizeString(matricula, "matricula") }
         
         try {
             const member = await prisma.member.findFirst({

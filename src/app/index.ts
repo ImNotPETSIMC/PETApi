@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { memberRouter } from "./route/member.route";
+import { projectRouter } from "./route/project.route";
 
 class App {
   public app: express.Application;
@@ -20,6 +21,7 @@ class App {
 
   route() {
     this.app.use("/member", memberRouter);
+    this.app.use("/project", projectRouter);
   }
 }
 
