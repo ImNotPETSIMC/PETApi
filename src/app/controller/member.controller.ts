@@ -2,25 +2,25 @@ import { Request, Response } from "express";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import MemberService from "../service/member.service";
 import { MemberRequestSchema } from "../schemas";
-import { ZodError } from "zod";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class MembersController {
   public async member(req: Request, res: Response) {
+    const memberService = new MemberService();
+    
+    if (!req.body.data) {
+      res.status(422).send({ error: "Missing some fields." });
+      return;
+    }
+    
+    const result = MemberRequestSchema.safeParse(req.body.data);
+    
+    if (!result.success) {
+      res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
+      return;
+    }
+    
     try {
-      const memberService = new MemberService();
-
-      if (!req.body.data) {
-        res.status(422).send({ error: "Missing some fields." });
-        return;
-      }
-  
-      const result = MemberRequestSchema.safeParse(req.body.data);
-  
-      if (!result.success) {
-        res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
-        return;
-      }
 
       const { data } = result;
       const member = await memberService.search(data.matricula);
