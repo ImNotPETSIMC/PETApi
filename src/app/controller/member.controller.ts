@@ -5,7 +5,7 @@ import { MemberRequestSchema } from "../schemas";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class MembersController {
-  public async member(req: Request, res: Response) {
+  public async search(req: Request, res: Response) {
     const memberService = new MemberService();
     
     if (!req.body.data) {
@@ -28,11 +28,16 @@ export class MembersController {
       res.status(200).send(member);
 
     } catch (error) {
+      if (error instanceof ValidationExceptionError) {
+        res.status(error.code).send({ error: error.message });
+        return;
+      }
+      
       throw error;
     }
   }
 
-  public async members(req: Request, res: Response) {
+  public async show(req: Request, res: Response) {
     const memberService = new MemberService();
 
     const { data } = req.body;
