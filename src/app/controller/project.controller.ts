@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import ProjectService from "../service/project.service";
 import { ValidationExceptionError } from "../exception/validation.exception";
-import { ProjectRequestSchema, ProjectsRequestSchema } from "../schemas";
+import { ProjectSearchRequestSchema, ProjectShowRequestSchema } from "../schemas";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class ProjectController {
@@ -13,7 +13,7 @@ export class ProjectController {
       return;
     }
 
-    const result = ProjectRequestSchema.safeParse(req.body.data);
+    const result = ProjectSearchRequestSchema.safeParse(req.body.data);
 
     if (!result.success) {
       res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
@@ -45,7 +45,7 @@ export class ProjectController {
       return;
     }
 
-    const result = ProjectsRequestSchema.safeParse(req.body.data);
+    const result = ProjectShowRequestSchema.safeParse(req.body.data);
 
     if (!result.success) {
       res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
