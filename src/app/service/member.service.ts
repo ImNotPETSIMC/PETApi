@@ -70,6 +70,10 @@ export default class MemberService {
             };
 
         } catch(err) { 
+            if(err instanceof Prisma.PrismaClientKnownRequestError) {
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found"); 
+            }
+
             throw err;
         }
     };
@@ -147,7 +151,9 @@ export default class MemberService {
                 ...result
             };
         } catch(err) { 
-            if(err instanceof ValidationExceptionError) throw err;
+            if(err instanceof Prisma.PrismaClientKnownRequestError) {
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found"); 
+            }
 
             throw err; 
         }
