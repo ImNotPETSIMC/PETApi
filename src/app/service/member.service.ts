@@ -14,9 +14,11 @@ export default class MemberService {
         const requestRef = { matricula: normalizeString(matricula, "matricula") }
         
         try {
-            const member = await prisma.member.findFirst({
+            const member = await prisma.member.findMany({
                 where : {
-                    matricula: requestRef.matricula
+                    matricula: {
+                        contains: requestRef.matricula
+                    }          
                 }
             });
             

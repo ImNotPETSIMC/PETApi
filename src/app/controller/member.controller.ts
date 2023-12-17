@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import MemberService from "../service/member.service";
-import { MemberRequestSchema, MemberSearchRequestSchema, MemberShowRequestSchema } from "../schemas";
+import { MemberRemoveRequestSchema, MemberRequestSchema, MemberSearchRequestSchema, MemberShowRequestSchema } from "../schemas";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class MembersController {
@@ -109,7 +109,7 @@ export class MembersController {
       return;
     }
     
-    const result = MemberSearchRequestSchema.safeParse(req.body.data);
+    const result = MemberRemoveRequestSchema.safeParse(req.body.data);
     
     if (!result.success) {
       res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
