@@ -7,5 +7,6 @@ const memberController = new MembersController();
 
 memberRouter.get("/search", memberController.search);
 memberRouter.get("/show", memberController.show);
+memberRouter.post("/register", memberController.register);
 
 export { memberRouter };
