@@ -11,7 +11,7 @@ model Member {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String
   matricula String @unique
-  base64Photo String
+  photo String
   admission_year Int
   email String
   github_url String
@@ -26,7 +26,7 @@ model Project {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
   description String
-  base64Photo String
+  photo String
   status String
   type String
 }

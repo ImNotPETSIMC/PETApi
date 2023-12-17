@@ -5,7 +5,7 @@ import { normalizeString } from "../helper/normalizeString";
 import { prisma } from "../database/prisma";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import { isValidURL } from "../helper/isValidURL";
-import { MemberRequestSchema } from "../schemas";
+import { MemberCreateRequestSchema, MemberUpdateRequestSchema } from "../schemas";
 import { Prisma } from "@prisma/client";
 
 
@@ -25,7 +25,7 @@ export default class MemberService {
             if(!member) throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found");
 
             return {
-                data: member
+                ...member
             };
         } catch(err) { 
             throw err;
@@ -47,7 +47,7 @@ export default class MemberService {
             if(!members.length) throw new ValidationExceptionError(404,"No members with status " + status + " found"); 
             
             return {
-                data: members
+                ...members
             };
         } catch(err) { 
             throw err;
@@ -59,14 +59,14 @@ export default class MemberService {
 
         try {
             
-            const member = await prisma.member.delete({
+            const result = await prisma.member.delete({
                 where : {
                     matricula: requestRef.matricula
                 }
             });
         
             return {
-                data: member
+                ...result
             };
 
         } catch(err) { 
@@ -74,13 +74,13 @@ export default class MemberService {
         }
     };
 
-    public async register(member: Zod.infer<typeof MemberRequestSchema>) {
+    public async register(member: Zod.infer<typeof MemberCreateRequestSchema>) {
         try {
-            [ { url: member.photo_url, name: "Photo URL"}, { url: member.github_url, name: "Github URL"}, { url: member.instagram_url, name: "Instagram URL"}, { url: member.linkedin_url, name: "LinkedIn URL"}, { url: member.lattes_url, name: "Lattes URL"}].map((params) => {
+            [ { url: member.photo, name: "Photo URL"}, { url: member.github_url, name: "Github URL"}, { url: member.instagram_url, name: "Instagram URL"}, { url: member.linkedin_url, name: "LinkedIn URL"}, { url: member.lattes_url, name: "Lattes URL"}].map((params) => {
                 if(!isValidURL(params.url)) throw new ValidationExceptionError(400, "Bad Request: Not Valid " + params.name); 
             });
             
-            const response = await Axios.get(member.photo_url, {responseType: 'arraybuffer'});
+            const response = await Axios.get(member.photo, {responseType: 'arraybuffer'});
             
             if(response.headers["content-length"] > 943718) {
                 throw new ValidationExceptionError(413, "File over 0.9MiB");
@@ -88,13 +88,13 @@ export default class MemberService {
             
             const name = normalizeString(member.name, "name");
             const matricula = normalizeString(member.matricula, "matricula");
-            const base64Photo = Buffer.from(response.data).toString('base64');
+            const photo = Buffer.from(response.data).toString('base64');
 
-            await prisma.member.create({
+            const result = await prisma.member.create({
                 data:{
                     name: name,
                     matricula: matricula,
-                    base64Photo: base64Photo,
+                    photo: photo,
                     status: member.status,
                     email: member.email,
                     github_url: member.github_url,
@@ -107,7 +107,7 @@ export default class MemberService {
             });
             
             return {
-                data: member,
+                ...result
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -115,6 +115,41 @@ export default class MemberService {
             } 
 
             throw err;
+        }
+    };
+
+    public async update(member: Zod.infer<typeof MemberUpdateRequestSchema>) {
+        const requestRef = member;
+
+        requestRef.matricula = normalizeString(member.matricula, "matricula");
+
+        try {
+            if(member.photo) {
+                const response = await Axios.get(member.photo, {responseType: 'arraybuffer'});
+                
+                if(response.headers["content-length"] > 943718) {
+                    throw new ValidationExceptionError(413, "File over 0.9MiB");
+                }
+    
+                requestRef.photo = Buffer.from(response.data).toString('base64');
+            };
+
+            const result = await prisma.member.update({
+                where: {
+                    matricula: requestRef.matricula
+                },
+                data: {
+                    ...requestRef
+                },
+            })
+
+            return {
+                ...result
+            };
+        } catch(err) { 
+            if(err instanceof ValidationExceptionError) throw err;
+
+            throw err; 
         }
     };
 }

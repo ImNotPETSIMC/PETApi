@@ -1,6 +1,6 @@
 export class Member {
     name: string;
-    photo_url: string;
+    photo: string;
     matricula: string;
     admission_year: number;
     email: string;
@@ -11,9 +11,9 @@ export class Member {
     status: string;
     projects: string[] = [];
 
-    constructor(name: string, photo_url: string, matricula: string, admission_year: number, email: string, github_url: string, instagram_url: string, linkedin_url: string, lattes_url: string, status: string, projects?: string[]) {
+    constructor(name: string, photo: string, matricula: string, admission_year: number, email: string, github_url: string, instagram_url: string, linkedin_url: string, lattes_url: string, status: string, projects?: string[]) {
         this.name = name;
-        this.photo_url = photo_url;
+        this.photo = photo;
         this.matricula = matricula;
         this.admission_year = admission_year;
         this.email = email;
@@ -29,14 +29,14 @@ export class Member {
 export class Project {
     name: string;
     type: string;
-    photo_url: string;
+    photo: string;
     description: string;
     status: string;
 
-    constructor(name: string, type: string, photo_url: string, description: string, status: string) {
+    constructor(name: string, type: string, photo: string, description: string, status: string) {
         this.name = name;
         this.type = type;
-        this.photo_url = photo_url;
+        this.photo = photo;
         this.description = description;
         this.status = status;
     };

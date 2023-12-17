@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import MemberService from "../service/member.service";
-import { MemberRemoveRequestSchema, MemberRequestSchema, MemberSearchRequestSchema, MemberShowRequestSchema } from "../schemas";
+import { MemberRemoveRequestSchema, MemberCreateRequestSchema, MemberSearchRequestSchema, MemberShowRequestSchema, MemberUpdateRequestSchema } from "../schemas";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class MembersController {
@@ -25,7 +25,7 @@ export class MembersController {
 
       const member = await memberService.search(data.matricula);
 
-      res.status(200).send(member);
+      res.status(200).send({data: member});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
@@ -57,7 +57,7 @@ export class MembersController {
       
       const members = await memberService.show(data.status);
 
-      res.status(200).send(members);
+      res.status(200).send({data: members});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
@@ -77,7 +77,7 @@ export class MembersController {
       return;
     }
     
-    const result = MemberRequestSchema.safeParse(req.body.data);
+    const result = MemberCreateRequestSchema.safeParse(req.body.data);
     
     if (!result.success) {
       res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
@@ -89,7 +89,7 @@ export class MembersController {
 
       const member = await memberService.register(data);
 
-      res.status(200).send({message: "✅ - Success - " + member.data.matricula + " - " + member.data.name  + " added to Membros", data: member});
+      res.status(200).send({message: "✅ - Success - " + member.matricula + " - " + member.name  + " added to Membros", data: member});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
@@ -121,7 +121,39 @@ export class MembersController {
 
       const member = await memberService.remove(data.matricula);
 
-      res.status(200).send({message: "🗑️ - Remotion Completed - " + member.data.matricula + " - " + member.data.name  + " deleted.", data: member});
+      res.status(200).send({message: "🗑️ - Remotion Completed - " + member.matricula + " - " + member.name  + " deleted.", data: member});
+
+    } catch (error) {
+      if (error instanceof ValidationExceptionError) {
+        res.status(error.code).send({ error: error.message });
+        return;
+      }
+
+      throw error;
+    }
+  };
+
+  public async update(req: Request, res: Response) {
+    const memberService = new MemberService();
+    
+    if (!req.body.data) {
+      res.status(422).send({ error: "Missing some fields." });
+      return;
+    }
+    
+    const result = MemberUpdateRequestSchema.safeParse(req.body.data);
+    
+    if (!result.success) {
+      res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
+      return;
+    }
+
+    try {
+      const { data } = result;
+
+      const member = await memberService.update(data);
+
+      res.status(200).send({message: "✅ - Success - " + member.matricula + " - " + member.name  + " updated", data: member});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
