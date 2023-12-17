@@ -2,11 +2,11 @@ import Axios from "axios";
 import Zod  from "zod";
 
 import { normalizeString } from "../helper/normalizeString";
-import { Member } from "../classes";
 import { prisma } from "../database/prisma";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import { isValidURL } from "../helper/isValidURL";
 import { MemberRequestSchema } from "../schemas";
+import { Prisma } from "@prisma/client";
 
 
 export default class MemberService {
@@ -21,16 +21,12 @@ export default class MemberService {
             });
             
             if(!member) throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found");
-            if(!member.projects.length) member.projects.push("🚫")
 
             return {
                 data: member
             };
-        } catch(err: any) { 
-            if(err instanceof ValidationExceptionError) throw err;
-            if(err.toString()) throw new ValidationExceptionError(400, err.toString()); 
-            
-            throw new ValidationExceptionError(400, err); 
+        } catch(err) { 
+            throw err;
         }
     };
 
@@ -43,23 +39,16 @@ export default class MemberService {
             });
 
             const members = results.map((data) => { 
-                if(data.status == status) {
-                    const member = new Member(data.name, data.base64Photo, data.matricula, data.admission_year, data.email, data.github_url, data.instagram_url, data.linkedin_url, data.lattes_url, data.status, data.projects);
-                    if(!member.projects.length) member.projects.push("🚫")     
-                    return { ...member };
-                }
+                if(data.status == status) return { ...data };
             });
 
-            if(!members.toString().length) throw new ValidationExceptionError(404,"No members with status " + status + " found"); 
+            if(!members.length) throw new ValidationExceptionError(404,"No members with status " + status + " found"); 
             
             return {
                 data: members
             };
-        } catch(err: any) { 
-            if(err instanceof ValidationExceptionError) throw err;
-            if(err.toString()) throw new ValidationExceptionError(400, err.toString()); 
-            
-            throw new ValidationExceptionError(400, err); 
+        } catch(err) { 
+            throw err;
         }
     };
 
@@ -78,12 +67,8 @@ export default class MemberService {
                 data: member
             };
 
-        } catch(err: any) { 
-            if(err instanceof ValidationExceptionError) throw err;
-            if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found");
-            if(err.toString()) throw new ValidationExceptionError(400, err.toString()); 
-
-            throw new ValidationExceptionError(400, err); 
+        } catch(err) { 
+            throw err;
         }
     };
 
@@ -122,12 +107,12 @@ export default class MemberService {
             return {
                 data: member,
             };
-        } catch(err: any) { 
-            if(err instanceof ValidationExceptionError) throw err;
-            if(err.code == "P2002") throw new ValidationExceptionError(409, "Bad Request: " + member.matricula + " - Já Cadastrado")
-            if(err.toString()) throw new ValidationExceptionError(400, err.toString()); 
+        } catch(err) { 
+            if(err instanceof Prisma.PrismaClientKnownRequestError) {
+                if(err.code == "P2002") throw new ValidationExceptionError(409, "Bad Request: " + member.matricula + " - Já Cadastrado")
+            } 
 
-            throw new ValidationExceptionError(400, err); 
+            throw err;
         }
     };
 }
