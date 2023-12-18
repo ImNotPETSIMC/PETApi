@@ -79,26 +79,18 @@ export default class MemberService {
     };
 
     public async register(member: Zod.infer<typeof MemberCreateRequestSchema>) {
-        try {
-            [ { url: member.photo, name: "Photo URL"}, { url: member.github_url, name: "Github URL"}, { url: member.instagram_url, name: "Instagram URL"}, { url: member.linkedin_url, name: "LinkedIn URL"}, { url: member.lattes_url, name: "Lattes URL"}].map((params) => {
-                if(!isValidURL(params.url)) throw new ValidationExceptionError(400, "Bad Request: Not Valid " + params.name); 
-            });
-            
+        try {       
             const response = await Axios.get(member.photo, {responseType: 'arraybuffer'});
-            
-            if(response.headers["content-length"] > 943718) {
-                throw new ValidationExceptionError(413, "File over 0.9MiB");
-            }
             
             const name = normalizeString(member.name, "name");
             const matricula = normalizeString(member.matricula, "matricula");
-            const photo = Buffer.from(response.data).toString('base64');
+            const base64Photo = Buffer.from(response.data).toString('base64');
 
             const result = await prisma.member.create({
                 data:{
                     name: name,
                     matricula: matricula,
-                    photo: photo,
+                    photo: base64Photo,
                     status: member.status,
                     email: member.email,
                     github_url: member.github_url,
@@ -130,11 +122,6 @@ export default class MemberService {
         try {
             if(member.photo) {
                 const response = await Axios.get(member.photo, {responseType: 'arraybuffer'});
-                
-                if(response.headers["content-length"] > 943718) {
-                    throw new ValidationExceptionError(413, "File over 0.9MiB");
-                }
-    
                 requestRef.photo = Buffer.from(response.data).toString('base64');
             };
 
