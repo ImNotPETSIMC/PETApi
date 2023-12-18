@@ -2,45 +2,32 @@ import { normalizeString } from "../helper/normalizeString";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import { prisma } from "../database/prisma";
 import { Prisma } from "@prisma/client";
-import { ProjectCreateRequestSchema, ProjectUpdateRequestSchema } from "../schemas";
+import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRequestSchema, ProjectUpdateRequestSchema } from "../schemas";
 import Axios from "axios";
 
 export default class ProjectService {
-    public async search(name: string) {
-        const requestRef = { name: normalizeString(name, "name") }
+    public async search(project: Zod.infer<typeof ProjectSearchRequestSchema>) {
+        const requestRef = project;
 
-        try {
-            const project = await prisma.project.findFirst({
-                where: {
-                    name: requestRef.name
-                }
-            })
+        if(project.name) requestRef.name = normalizeString(project.name, "name");
 
-            if(!project) throw new ValidationExceptionError(404, requestRef.name + " - Project not found"); 
-
-            return {
-                ...project
-            };
-        } catch(err) { 
-            throw err;
-        }
-    };
-
-    public async show(status: string) {
         try {
             const projects = await prisma.project.findMany({
-                where : {
-                    status: status
-                }
-            });
+                where: {
+                    name: { contains: requestRef.name },
+                    description: { contains: requestRef.description },
+                    status: { contains: requestRef.status },
+                    type: { contains: requestRef.type }
+                },
+            })
 
-            if(!projects.length) throw new ValidationExceptionError(404,"No projects with status " + status + " found"); 
-            
+            if(!projects.length) throw new ValidationExceptionError(404, requestRef.name + " - Projects not found"); 
+
             return {
                 ...projects
             };
-        } catch(err) {         
-            throw err; 
+        } catch(err) { 
+            throw err;
         }
     };
 
@@ -103,118 +90,27 @@ export default class ProjectService {
         }
     };
 
-    // public async add_member(project: string, member: string) {
-    //     const requestRef = { project: normalizeString(project, "name"), member: normalizeString(member, "matricula") };
+    public async remove(project: Zod.infer<typeof ProjectRemoveRequestSchema>) {
+        const requestRef = project;
 
-    //     try {   
-    //         const project = await prisma.project.findFirst({
-    //             where: {
-    //                 name: requestRef.project
-    //             }
-    //         })
+        requestRef.name = normalizeString(project.name, "name");
 
-    //         const member = await prisma.member.findFirst({
-    //             where : {
-    //                 matricula: requestRef.member
-    //             }
-    //         });
-
+        try {
+            const project = await prisma.project.delete({
+                where : {
+                    name: requestRef.name
+                }
+            });
             
-    //         if(!project) throw new ValidationExceptionError(404, requestRef.project + " - Project not found"); 
-    //         if(!member) throw new ValidationExceptionError(404, requestRef.member + " - Member not found");
-    //         if(member.projects.includes(project.name)) throw new ValidationExceptionError(400, "Bad Request: " + requestRef.member + " - Membro Já Cadastrado no Projeto " + requestRef.project);  
-            
-    //         const projectRef = member.projects;
-    //         projectRef.push(requestRef.project);
-
-    //         await prisma.member.update({
-    //             where: {
-    //                 matricula: requestRef.member
-    //             },
-
-    //             data: {
-    //                 projects: projectRef
-    //             }
-    //         });
-
-    //         return {
-    //             data: {
-    //                 member: member, 
-    //                 project: project, 
-    //             }
-    //         };
-    //     } catch(err) { 
-    //         if(err instanceof ValidationExceptionError) throw err;
-    //         if(err.toString()) throw new ValidationExceptionError(400, err.toString()); 
-
-    //         throw new ValidationExceptionError(400, err); 
-    //     }
-    // };
-
-    // public async remove_member(project: string, member: string) {
-    //     const requestRef = { project: normalizeString(project, "name"), member: normalizeString(member, "matricula") };
-    //     try {   
-    //         const project = await prisma.project.findFirst({
-    //             where: {
-    //                 name: requestRef.project
-    //             }
-    //         })
-
-    //         const member = await prisma.member.findFirst({
-    //             where : {
-    //                 matricula: requestRef.member
-    //             }
-    //         });
-
-    //         if(!project) throw new ValidationExceptionError(404, requestRef.project + " - Project not found"); 
-    //         if(!member) throw new ValidationExceptionError(404, requestRef.member + " - Member not found");
-    //         if(!member.projects.includes(project.name)) throw new ValidationExceptionError(400, "Bad Request: " + requestRef.member + " - Membro Não Cadastrado no Projeto " + requestRef.project);  
+            return {
+                ...project
+            };
+        } catch(err) { 
+            if(err instanceof Prisma.PrismaClientKnownRequestError) {
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - Project not found"); 
+            } 
         
-    //         const projectRef = member.projects;
-    //         const index = projectRef.indexOf(project.name);
-    //         projectRef.splice(index, 1);
-
-    //         await prisma.member.update({
-    //             where: {
-    //                 matricula: requestRef.member
-    //             },
-
-    //             data: {
-    //                 projects: projectRef
-    //             }
-    //         });
-
-    //         return {
-    //             data: {
-    //                 member: member.matricula,
-    //                 member_name: member.name,
-    //                 project: project.name, 
-    //             }
-    //         };
-    //     } catch(err) {     
-    //         throw err; 
-    //     }
-    // };
-
-    // public async remove(name: string) {
-    //     const requestRef = { name: normalizeString(name, "name") };
-
-    //     try {
-    //         const project = await prisma.project.delete({
-    //             where : {
-    //                 name: requestRef.name
-    //             }
-    //         });
-            
-    //         return {
-    //             name: project.name
-    //         };
-    //     } catch(err) { 
-    //         if(err instanceof ValidationExceptionError) throw err;
-    //         if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - Project not found"); 
-    //         if(err.toString()) throw new ValidationExceptionError(400, err.toString()); 
-
-    //         throw new ValidationExceptionError(400, err); 
-    //     }
-    // };
+            throw err;
+        }
+    };
 }
