@@ -4,48 +4,35 @@ import Zod  from "zod";
 import { normalizeString } from "../helper/normalizeString";
 import { prisma } from "../database/prisma";
 import { ValidationExceptionError } from "../exception/validation.exception";
-import { isValidURL } from "../helper/isValidURL";
-import { MemberCreateRequestSchema, MemberUpdateRequestSchema } from "../schemas";
+import { MemberCreateRequestSchema, MemberSearchRequestSchema, MemberUpdateRequestSchema } from "../schemas";
 import { Prisma } from "@prisma/client";
 
 
 export default class MemberService {
-    public async search(matricula: string) {
-        const requestRef = { matricula: normalizeString(matricula, "matricula") }
+    public async search(member: Zod.infer<typeof MemberSearchRequestSchema>) {
+        const requestRef = member;
+
+        if(member.matricula) requestRef.matricula = normalizeString(member.matricula, "matricula");
+        if(member.name) requestRef.name = normalizeString(member.name, "name");
         
         try {
-            const member = await prisma.member.findMany({
+            const members = await prisma.member.findMany({
                 where : {
-                    matricula: {
-                        contains: requestRef.matricula
-                    }          
+                    matricula: { contains: requestRef.matricula },
+                    name: { contains: requestRef.name },
+                    admission_year: requestRef.admission_year,
+                    email: { contains: requestRef.email },
+                    github_url: { contains: requestRef.github_url },
+                    linkedin_url: { contains: requestRef.linkedin_url },
+                    instagram_url: {contains: requestRef.instagram_url },
+                    lattes_url: { contains: requestRef.lattes_url },
+                    status: { contains: requestRef.status },
+                    projects: { hasEvery: requestRef.projects }
                 }
             });
             
-            if(!member) throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found");
+            if(!members.length) throw new ValidationExceptionError(404, "Member not found");
 
-            return {
-                ...member
-            };
-        } catch(err) { 
-            throw err;
-        }
-    };
-
-    public async show(status: string) {
-        try {
-            const results = await prisma.member.findMany({
-                where : {
-                    status: status
-                }
-            });
-
-            const members = results.map((data) => { 
-                if(data.status == status) return { ...data };
-            });
-
-            if(!members.length) throw new ValidationExceptionError(404,"No members with status " + status + " found"); 
-            
             return {
                 ...members
             };
@@ -53,7 +40,7 @@ export default class MemberService {
             throw err;
         }
     };
-
+    
     public async remove(matricula: string) {
         const requestRef = { matricula: normalizeString(matricula, "matricula") };
 
@@ -118,6 +105,7 @@ export default class MemberService {
         const requestRef = member;
 
         requestRef.matricula = normalizeString(member.matricula, "matricula");
+        if(member.name) requestRef.name = normalizeString(member.name, "name");
 
         try {
             if(member.photo) {

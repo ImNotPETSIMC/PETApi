@@ -5,8 +5,7 @@ const memberRouter = Router();
 
 const memberController = new MembersController();
 
-memberRouter.get("/search", memberController.search);
-memberRouter.get("/show", memberController.show);
+memberRouter.get("/", memberController.search);
 memberRouter.post("/", memberController.register);
 memberRouter.put("/", memberController.update);
 memberRouter.delete("/", memberController.remove);
