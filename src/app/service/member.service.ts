@@ -1,4 +1,4 @@
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import Zod  from "zod";
 
 import { normalizeString } from "../helper/normalizeString";
@@ -95,8 +95,12 @@ export default class MemberService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2002") throw new ValidationExceptionError(409, "Bad Request: " + member.matricula + " - Já Cadastrado")
+                if(err.code == "P2002") throw new ValidationExceptionError(400, "Bad Request: " + member.matricula + " - Já Cadastrado")
             } 
+
+            if(err instanceof AxiosError) {
+                throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
+            }
 
             throw err;
         }
@@ -131,6 +135,10 @@ export default class MemberService {
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
                 if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found"); 
+            }
+
+            if(err instanceof AxiosError) {
+                throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
             }
 
             throw err; 

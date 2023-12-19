@@ -3,7 +3,7 @@ import { ValidationExceptionError } from "../exception/validation.exception";
 import { prisma } from "../database/prisma";
 import { Prisma } from "@prisma/client";
 import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRequestSchema, ProjectUpdateRequestSchema } from "../schemas";
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 
 export default class ProjectService {
     public async search(project: Zod.infer<typeof ProjectSearchRequestSchema>) {
@@ -55,8 +55,12 @@ export default class ProjectService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2002") throw new ValidationExceptionError(409, "Bad Request: " + name + " - Já Cadastrado")
+                if(err.code == "P2002") throw new ValidationExceptionError(400, "Bad Request: " + name + " - Já Cadastrado")
             } 
+
+            if(err instanceof AxiosError) {
+                throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
+            }
         
             throw err;
         }
@@ -89,6 +93,10 @@ export default class ProjectService {
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
                 if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - Project not found"); 
             } 
+
+            if(err instanceof AxiosError) {
+                throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
+            }
         
             throw err;
         }
