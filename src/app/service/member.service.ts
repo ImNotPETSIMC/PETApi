@@ -73,6 +73,8 @@ export default class MemberService {
             const matricula = normalizeString(member.matricula, "matricula");
             const base64Photo = Buffer.from(response.data).toString('base64');
 
+            if(base64Photo.slice(0, 5) != '/9j/4' && base64Photo.charAt(0) != 'i') throw new ValidationExceptionError(400, "Bad Request: Unsupported image extension, try using .jpg or .png");
+
             const result = await prisma.member.create({
                 data:{
                     name: name,
@@ -111,6 +113,8 @@ export default class MemberService {
             if(member.photo) {
                 const response = await Axios.get(member.photo, {responseType: 'arraybuffer'});
                 requestRef.photo = Buffer.from(response.data).toString('base64');
+                
+                if(requestRef.photo.slice(0, 5) != '/9j/4' && requestRef.photo.charAt(0) != 'i') throw new ValidationExceptionError(400, "Bad Request: Unsupported image extension, try using .jpg or .png");
             };
 
             const result = await prisma.member.update({

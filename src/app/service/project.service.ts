@@ -38,6 +38,8 @@ export default class ProjectService {
             const response = await Axios.get(project.photo, {responseType: 'arraybuffer'});
             const base64Photo = Buffer.from(response.data).toString('base64');
 
+            if(base64Photo.slice(0, 5) != '/9j/4' && base64Photo.charAt(0) != 'i') throw new ValidationExceptionError(400, "Bad Request: Unsupported image extension, try using .jpg or .png");
+
             const result = await prisma.project.create({
                 data : {
                     name: name,
@@ -67,6 +69,8 @@ export default class ProjectService {
             if(project.photo) {
                 const response = await Axios.get(project.photo, {responseType: 'arraybuffer'});
                 requestRef.photo = Buffer.from(response.data).toString('base64');
+
+                if(requestRef.photo.slice(0, 5) != '/9j/4' && requestRef.photo.charAt(0) != 'i') throw new ValidationExceptionError(400, "Bad Request: Unsupported image extension, try using .jpg or .png");
             };
 
             const result = await prisma.project.update({
