@@ -60,7 +60,6 @@ export const MemberCreateRequestSchema = Zod.object({
 export const MemberSearchRequestSchema = Zod.object({
     name: Zod
         .string({ required_error: "Field name must compose request body."})
-        .min(1, { message: "Field name must not be empty." })
         .optional(),
 
     matricula: Zod
@@ -107,13 +106,12 @@ export const MemberSearchRequestSchema = Zod.object({
         .refine((str => (str == "Petiano" || str == "Ex-Petiano" || str ==  "Tutor" || str ==  "Ex-Tutor")), { message: "Status must be Petiano, Ex-Petiano, Tutor or Ex-Tutor" })
         .optional(),
 
-    projects: Zod
-        .array(
-            Zod
-            .string({ required_error: "Field name must compose request body."})
-            .min(1, { message: "Field name must not be empty." }),
-        { required_error: "Field projects must compose body"})
-        .optional()
+    // projects: Zod
+    //     .array(
+    //         Zod
+    //         .string(),
+    //     { required_error: "Field projects must compose body"})
+    //     .optional()
 });
 
 export const MemberUpdateRequestSchema = Zod.object({

@@ -26,8 +26,7 @@ export default class MemberService {
                     linkedin_url: { contains: requestRef.linkedin_url },
                     instagram_url: {contains: requestRef.instagram_url },
                     lattes_url: { contains: requestRef.lattes_url },
-                    status: { contains: requestRef.status },
-                    projects: { hasEvery: requestRef.projects }
+                    status: { contains: requestRef.status }
                 }
             });
             
