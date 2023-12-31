@@ -8,13 +8,8 @@ export class MembersController {
   public async search(req: Request, res: Response) {
     const memberService = new MemberService();
     
-    if (!req.body.data) {
-      res.status(422).send({ error: "Missing some fields." });
-      return;
-    }
-    
-    const result = MemberSearchRequestSchema.safeParse(req.body.data);
-    
+    const result = MemberSearchRequestSchema.safeParse(req.query);
+
     if (!result.success) {
       res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
       return;

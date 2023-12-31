@@ -8,12 +8,7 @@ export class ProjectController {
   public async search(req: Request, res: Response) {
     const projectService = new ProjectService();
 
-    if (!req.body.data) {
-      res.status(422).send({ error: "Missing some fields." });
-      return;
-    }
-
-    const result = ProjectSearchRequestSchema.safeParse(req.body.data);
+    const result = ProjectSearchRequestSchema.safeParse(req.query);
 
     if (!result.success) {
       res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
