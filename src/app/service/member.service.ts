@@ -30,7 +30,7 @@ export default class MemberService {
                     hobby: { contains: requestRef.hobby },
                     place_of_birth: { contains: requestRef.place_of_birth },
                     spotify_track_url: { contains: requestRef.spotify_track_url },
-                    course_curriculum:  requestRef.course_curriculum,
+                    course_curriculum: requestRef.course_curriculum,
                 }
             });
             

@@ -16,7 +16,7 @@ model Member {
   photo String
   admission_year Int?
   favorite_pillar String?
-  course_curriculum Int
+  course_curriculum Int?
   place_of_birth String?
   hobby String?
   projects String[]

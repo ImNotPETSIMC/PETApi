@@ -90,6 +90,7 @@ export const MemberSearchRequestSchema = Zod.object({
         .optional(),
 
     admission_year: Zod
+        .coerce
         .number()
         .min(1, { message: "Field admission_year must not be empty." })
         .optional(),
@@ -130,8 +131,9 @@ export const MemberSearchRequestSchema = Zod.object({
         .optional(),
 
     status: Zod
-        .string({ required_error: "Field status must compose request body." })
-        .refine((str => (str == "Membro" || str == "Ex-Membro")), { message: "Status must be Membro or Ex-Membro." }),
+        .string()
+        .refine((str => (str == "Membro" || str == "Ex-Membro")), { message: "Status must be Membro or Ex-Membro." })
+        .optional(),
 
     hobby: Zod
         .string()
@@ -142,9 +144,10 @@ export const MemberSearchRequestSchema = Zod.object({
         .optional(),
 
     course_curriculum: Zod
-        .number({ required_error: "Field course_curriculum must compose request body." })
-        .min(2016, { message: "Field course_curriculum must be a valid one." }),
-
+        .coerce
+        .number()
+        .min(2016, { message: "Field course_curriculum must be a valid one." })
+        .optional(),
 
     spotify_track_url: Zod
         .string()
@@ -218,8 +221,9 @@ export const MemberUpdateRequestSchema = Zod.object({
         .optional(),
 
     course_curriculum: Zod
-        .number({ required_error: "Field course_curriculum must compose request body." })
-        .min(2016, { message: "Field course_curriculum must be a valid one." }),
+        .number()
+        .min(2016, { message: "Field course_curriculum must be a valid one." })
+        .optional(),
 
 
     spotify_track_url: Zod
