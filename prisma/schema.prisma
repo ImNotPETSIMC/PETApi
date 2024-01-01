@@ -9,24 +9,51 @@ generator client {
 
 model Member {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
   matricula String @unique
+  name String
+  status String
   photo String
   admission_year Int
-  email String
+  favorite_pillar String
+  course_curriculum Int
+  place_of_birth String
+  hobby String
+  projects String[]
+  spotify_track_url String 
   github_url String
   linkedin_url String
   instagram_url String
   lattes_url String
+}
+
+model Tutor {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+  photo String
+  admission_year Int
+  email String
   status String
-  projects String[]
+  disciplines String[]
+  github_url String
+  linkedin_url String
+  instagram_url String
+  lattes_url String
 }
 
 model Project {
   id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
+  name String @unique    
+  subtitle String
   description String
   photo String
   status String
-  type String
+}
+
+model News {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique    
+  date DateTime
+  description String
+  photo String
+  status String
 }
