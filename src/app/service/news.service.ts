@@ -50,7 +50,7 @@ export default class NewsService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2002") throw new ValidationExceptionError(400, "Bad Request: " + name + " - Já Cadastrado")
+                if(err.code == "P2002") throw new ValidationExceptionError(400, "Bad Request: " + requestRef.name + " - Já Cadastrado")
             } 
 
             if(err instanceof AxiosError) {
@@ -103,7 +103,7 @@ export default class NewsService {
         try {
             const news = await prisma.news.delete({
                 where : {
-                    id: requestRef.id
+                    name: requestRef.name
                 }
             });
             
@@ -112,7 +112,7 @@ export default class NewsService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.id + " - News not found"); 
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - News not found"); 
             } 
         
             throw err;
