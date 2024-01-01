@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import MemberService from "../service/member.service";
-import { MemberRemoveRequestSchema, MemberCreateRequestSchema, MemberSearchRequestSchema, MemberUpdateRequestSchema } from "../schemas";
+import { MemberRemoveRequestSchema, MemberCreateRequestSchema, MemberSearchRequestSchema, MemberUpdateRequestSchema } from "../schemas/member.schemas";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class MembersController {

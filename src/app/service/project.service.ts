@@ -2,7 +2,7 @@ import { normalizeString } from "../helper/normalizeString";
 import { ValidationExceptionError } from "../exception/validation.exception";
 import { prisma } from "../database/prisma";
 import { Prisma } from "@prisma/client";
-import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRequestSchema, ProjectUpdateRequestSchema } from "../schemas";
+import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRequestSchema, ProjectUpdateRequestSchema } from "../schemas/project.schemas";
 import Axios, { AxiosError } from "axios";
 
 export default class ProjectService {

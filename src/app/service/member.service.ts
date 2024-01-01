@@ -4,9 +4,8 @@ import Zod  from "zod";
 import { normalizeString } from "../helper/normalizeString";
 import { prisma } from "../database/prisma";
 import { ValidationExceptionError } from "../exception/validation.exception";
-import { MemberCreateRequestSchema, MemberSearchRequestSchema, MemberUpdateRequestSchema } from "../schemas";
+import { MemberCreateRequestSchema, MemberSearchRequestSchema, MemberUpdateRequestSchema } from "../schemas/member.schemas";
 import { Prisma } from "@prisma/client";
-
 
 export default class MemberService {
     public async search(member: Zod.infer<typeof MemberSearchRequestSchema>) {

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import ProjectService from "../service/project.service";
 import { ValidationExceptionError } from "../exception/validation.exception";
-import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRequestSchema, ProjectUpdateRequestSchema } from "../schemas";
+import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRequestSchema, ProjectUpdateRequestSchema } from "../schemas/project.schemas";
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class ProjectController {
