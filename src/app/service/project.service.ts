@@ -44,6 +44,7 @@ export default class ProjectService {
                 data : {
                     name: name,
                     type: project.type,
+                    subtitle: project.subtitle,
                     photo: base64Photo,
                     description: project.description,
                     status: project.status

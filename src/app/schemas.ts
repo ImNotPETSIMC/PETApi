@@ -249,6 +249,10 @@ export const ProjectCreateRequestSchema = Zod.object({
         .string({ required_error: "Field name must compose request body." })
         .min(1, { message: "Field name must not be empty." }),
 
+    subtitle: Zod
+        .string({ required_error: "Field subtitle must compose request body." })
+        .min(1, { message: "Field subtitle must not be empty." }),
+
     description: Zod
         .string({ required_error: "Field description must compose request body." })
         .min(1, { message: "Field description must not be empty." }),
@@ -268,20 +272,24 @@ export const ProjectCreateRequestSchema = Zod.object({
 
 export const ProjectSearchRequestSchema = Zod.object({
     name: Zod
-        .string({ required_error: "Field name must compose request body." })
+        .string()
+        .optional(),
+
+    subtitle: Zod
+        .string()
         .optional(),
 
     description: Zod
-        .string({ required_error: "Field description must compose request body." })
+        .string()
         .optional(),
 
     status: Zod
-        .string({ required_error: "Field status must compose request body." })
+        .string()
         .refine((str => (str == "Em Andamento" || str == "Concluido")), { message: "Status must be Em Andamento or Concluido" })
         .optional(),
 
     type: Zod
-        .string({ required_error: "Field type must compose request body." })
+        .string()
         .refine((str => (str == "Extensão" || str == "Ensino" || str == "Pesquisa" || str == "Outros")), { message: "Status must be Extensão, Ensino, Pesquisa or Outros." })
         .optional(),
 });
