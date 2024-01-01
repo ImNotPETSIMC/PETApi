@@ -15,6 +15,7 @@ export default class ProjectService {
             const projects = await prisma.project.findMany({
                 where: {
                     name: { contains: requestRef.name },
+                    subtitle: { contains: requestRef.subtitle },
                     description: { contains: requestRef.description },
                     status: { contains: requestRef.status },
                     type: { contains: requestRef.type }
