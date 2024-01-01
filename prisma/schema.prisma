@@ -12,33 +12,33 @@ model Member {
   matricula String @unique
   name String
   status String
-  email String
+  email String?
   photo String
-  admission_year Int
-  favorite_pillar String
+  admission_year Int?
+  favorite_pillar String?
   course_curriculum Int
-  place_of_birth String
-  hobby String
+  place_of_birth String?
+  hobby String?
   projects String[]
-  spotify_track_url String 
-  github_url String
-  linkedin_url String
-  instagram_url String
-  lattes_url String
+  spotify_track_url String?
+  github_url String?
+  linkedin_url String?
+  instagram_url String?
+  lattes_url String?
 }
 
 model Tutor {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
   photo String
-  admission_year Int
-  email String
+  admission_year Int?
+  email String?
   status String
   disciplines String[]
-  github_url String
-  linkedin_url String
-  instagram_url String
-  lattes_url String
+  github_url String?
+  linkedin_url String?
+  instagram_url String?
+  lattes_url String?
 }
 
 model Project {

@@ -1,4 +1,4 @@
-export const normalizeString = (string: string, type: string) => {
+export const normalizeString = (string?: string, type?: string) => {
     string = String(string);
     if(string.replace(/\s+/g, ' ').trim().length <= 1) return string;
     const dontCapitalize = ["de", "da", "do"];

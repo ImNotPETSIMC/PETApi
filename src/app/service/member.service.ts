@@ -26,7 +26,11 @@ export default class MemberService {
                     linkedin_url: { contains: requestRef.linkedin_url },
                     instagram_url: {contains: requestRef.instagram_url },
                     lattes_url: { contains: requestRef.lattes_url },
-                    status: { contains: requestRef.status }
+                    status: { contains: requestRef.status },
+                    hobby: { contains: requestRef.hobby },
+                    place_of_birth: { contains: requestRef.place_of_birth },
+                    spotify_track_url: { contains: requestRef.spotify_track_url },
+                    course_curriculum:  requestRef.course_curriculum,
                 }
             });
             
@@ -75,11 +79,15 @@ export default class MemberService {
             if(base64Photo.slice(0, 5) != '/9j/4' && base64Photo.charAt(0) != 'i') throw new ValidationExceptionError(400, "Bad Request: Unsupported image extension, try using .jpg or .png");
 
             const result = await prisma.member.create({
-                data:{
+                data: {
                     name: name,
                     matricula: matricula,
                     photo: base64Photo,
                     status: member.status,
+                    hobby: member.hobby,
+                    place_of_birth: member.place_of_birth,
+                    spotify_track_url: member.spotify_track_url,
+                    course_curriculum: member.course_curriculum,
                     email: member.email,
                     github_url: member.github_url,
                     instagram_url: member.instagram_url,
