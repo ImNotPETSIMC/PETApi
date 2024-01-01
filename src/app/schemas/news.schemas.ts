@@ -41,8 +41,7 @@ export const NewsUpdateRequestSchema = Zod.object({
     id: Zod
         .string()
         .min(1, { message: "Field id must not be empty." })
-        .transform((str : string) => str.replace(" ", "-"))
-        .optional(),
+        .transform((str : string) => str.replace(" ", "-")),
 
     name: Zod
         .string()

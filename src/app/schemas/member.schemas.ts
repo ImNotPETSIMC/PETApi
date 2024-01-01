@@ -174,7 +174,6 @@ export const MemberUpdateRequestSchema = Zod.object({
         .length(11, { message: "Field matricula must be 11 characters long." })
         .regex(/\d\d\d\d\dBSI[0-9]+/i, { message: "Field matricula must match UFU's pattern for Information System students." }),
 
-
     admission_year: Zod
         .number()
         .min(1, { message: "Field admission_year must not be empty." })
@@ -212,7 +211,8 @@ export const MemberUpdateRequestSchema = Zod.object({
 
     status: Zod
         .string()
-        .refine((str => (str == "Membro" || str == "Ex-Membro")), { message: "Status must be Membro or Ex-Membro." }),
+        .refine((str => (str == "Membro" || str == "Ex-Membro")), { message: "Status must be Membro or Ex-Membro." })
+        .optional(),
 
     hobby: Zod
         .string()
