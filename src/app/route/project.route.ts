@@ -6,8 +6,8 @@ const projectRouter = Router();
 
 const projectController = new ProjectController();
 
+projectRouter.get("/", projectController.search);
 projectRouter.post("/", authReq(['admin']), projectController.register);
-projectRouter.get("/", authReq(['admin']), projectController.search);
 projectRouter.put("/", authReq(['admin']), projectController.update);
 projectRouter.delete("/", authReq(['admin']), projectController.remove);
 
