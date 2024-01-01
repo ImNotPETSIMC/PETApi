@@ -56,6 +56,7 @@ export const MemberCreateRequestSchema = Zod.object({
         .string()
         .includes("open.spotify.com/track/", { message: "Field spotify_track_url must be filled with valid Spotify Track url." })
         .url({ message: "Field spotify_track_url must be filled with valid url." })
+        .transform(str => str.replace("https://open.spotify.com/track/", "").replace("/", ""))
         .optional(),
 
     status: Zod
@@ -155,6 +156,7 @@ export const MemberSearchRequestSchema = Zod.object({
         .string()
         .includes("open.spotify.com/track/", { message: "Field spotify_track_url must be filled with valid Spotify Track url." })
         .url({ message: "Field spotify_track_url must be filled with valid url." })
+        .transform(str => str.replace("https://open.spotify.com/track/", "").replace("/", ""))
         .optional(),
 });
 
@@ -232,6 +234,7 @@ export const MemberUpdateRequestSchema = Zod.object({
         .string()
         .includes("open.spotify.com/track/", { message: "Field spotify_track_url must be filled with valid Spotify Track url." })
         .url({ message: "Field spotify_track_url must be filled with valid url." })
+        .transform(str => str.replace("https://open.spotify.com/track/", "").replace("/", ""))
         .optional(),
 
     projects: Zod
