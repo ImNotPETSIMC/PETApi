@@ -211,6 +211,11 @@ export const MemberUpdateRequestSchema = Zod.object({
         .url({ message: "Field lattes_url must be filled with valid url." })
         .optional(),
 
+    favorite_pillar: Zod
+        .string()
+        .refine((str => (str == "Pesquisa" || str == "Extensão" || str == "Ensino")), { message: "Status must be Pesquisa, Extensão or Ensino." })
+        .optional(),
+
     status: Zod
         .string()
         .refine((str => (str == "Membro" || str == "Ex-Membro")), { message: "Status must be Membro or Ex-Membro." })
