@@ -72,7 +72,8 @@ export const TutorSearchRequestSchema = Zod.object({
 
     admission_year: Zod
         .number()
-        .min(2018, { message: "Field admission_year must be a valid one." }),
+        .min(2018, { message: "Field admission_year must be a valid one." })
+        .optional(),
 
     email: Zod
         .string()
