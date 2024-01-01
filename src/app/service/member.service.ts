@@ -33,7 +33,7 @@ export default class MemberService {
             if(!members.length) throw new ValidationExceptionError(404, "Member not found");
 
             return {
-                ...members
+                members
             };
         } catch(err) { 
             throw err;
