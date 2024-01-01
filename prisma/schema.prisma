@@ -53,10 +53,9 @@ model Project {
 }
 
 model News {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @map("_id") @db.ObjectId
   name String @unique    
-  date DateTime
-  description String
+  date String
+  content String
   photo String
-  status String
 }
