@@ -55,6 +55,10 @@ export const ProjectUpdateRequestSchema = Zod.object({
         .string({ required_error: "Field name must compose request body." })
         .min(1, { message: "Field name must not be empty." }),
 
+    subtitle: Zod
+        .string({ required_error: "Field subtitle must compose request body." })
+        .min(1, { message: "Field subtitle must not be empty." }),
+
     description: Zod
         .string({ required_error: "Field description must compose request body." })
         .min(1, { message: "Field description must not be empty." })
