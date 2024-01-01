@@ -21,8 +21,6 @@ export default class ProjectService {
                 },
             })
 
-            if(!projects.length) throw new ValidationExceptionError(404, requestRef.name + " - Projects not found"); 
-
             return {
                 projects
             };

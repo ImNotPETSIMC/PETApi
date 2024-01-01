@@ -33,8 +33,6 @@ export default class MemberService {
                     course_curriculum: requestRef.course_curriculum,
                 }
             });
-            
-            if(!members.length) throw new ValidationExceptionError(404, "Member not found");
 
             return {
                 members
