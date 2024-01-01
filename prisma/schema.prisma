@@ -12,6 +12,7 @@ model Member {
   matricula String @unique
   name String
   status String
+  email String
   photo String
   admission_year Int
   favorite_pillar String
@@ -45,6 +46,7 @@ model Project {
   name String @unique    
   subtitle String
   description String
+  type String
   photo String
   status String
 }
