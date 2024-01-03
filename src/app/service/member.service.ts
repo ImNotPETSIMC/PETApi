@@ -25,7 +25,7 @@ export default class MemberService {
                     linkedin_url: { contains: requestRef.linkedin_url },
                     instagram_url: { contains: requestRef.instagram_url },
                     lattes_url: { contains: requestRef.lattes_url },
-                    status: { contains: requestRef.status },
+                    status: requestRef.status,
                     hobby: { contains: requestRef.hobby },
                     place_of_birth: { contains: requestRef.place_of_birth },
                     spotify_track_url: { contains: requestRef.spotify_track_url },
