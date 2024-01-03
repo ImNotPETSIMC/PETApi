@@ -54,7 +54,7 @@ export const TutorCreateRequestSchema = Zod.object({
 
     area: Zod
         .string()
-        .min(1, { message: "Field place_of_birth must not be empty." })
+        .min(1, { message: "Field area must not be empty." })
         .optional(),
 
     disciplines: Zod
@@ -74,6 +74,11 @@ export const TutorSearchRequestSchema = Zod.object({
     photo: Zod
         .string()
         .url({ message: "Field photo must be filled with valid url." })
+        .optional(),
+
+    area: Zod
+        .string()
+        .min(1, { message: "Field area must not be empty." })
         .optional(),
 
     admission_year: Zod
@@ -173,6 +178,11 @@ export const TutorUpdateRequestSchema = Zod.object({
 
     place_of_birth: Zod
         .string()
+        .optional(),
+
+    area: Zod
+        .string()
+        .min(1, { message: "Field area must not be empty." })
         .optional(),
 
     disciplines: Zod
