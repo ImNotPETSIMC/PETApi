@@ -39,7 +39,7 @@ export const TutorCreateRequestSchema = Zod.object({
 
     lattes_url: Zod
         .string()
-        .includes("lattes.cnpq.br/", { message: "Field linkedin_url must be filled with valid Lattes url." })
+        .includes("lattes.cnpq.br/", { message: "Field lattes_url must be filled with valid Lattes url." })
         .url({ message: "Field lattes_url must be filled with valid url." })
         .optional(),
 
@@ -49,6 +49,12 @@ export const TutorCreateRequestSchema = Zod.object({
 
     place_of_birth: Zod
         .string()
+        .min(1, { message: "Field place_of_birth must not be empty." })
+        .optional(),
+
+    area: Zod
+        .string()
+        .min(1, { message: "Field place_of_birth must not be empty." })
         .optional(),
 
     disciplines: Zod
@@ -174,7 +180,7 @@ export const TutorUpdateRequestSchema = Zod.object({
             Zod
                 .string({ required_error: "Field name must compose request body." })
                 .min(1, { message: "Field name must not be empty." })
-            ).optional()
+        ).optional()
 });
 
 export const TutorRemoveRequestSchema = Zod.object({

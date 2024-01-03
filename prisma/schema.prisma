@@ -33,6 +33,7 @@ model Tutor {
   photo String
   admission_year Int?
   place_of_birth String?
+  area String?
   email String?
   status String
   disciplines String[]
