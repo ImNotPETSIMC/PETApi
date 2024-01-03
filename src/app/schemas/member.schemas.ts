@@ -17,7 +17,7 @@ export const MemberCreateRequestSchema = Zod.object({
     email: Zod
         .string({ required_error: "Field email must compose request body." })
         .email({ message: "Field email must be filled with valid email." })
-        .regex(/[A-Za-z]+@ufu\.br/i, { message: "Field email must be filled with an UFU institutional email." }),
+        .regex(/[A-Za-z0-9]+@ufu\.br/i, { message: "Field email must be filled with an UFU institutional email." }),
 
     admission_year: Zod
         .number({ required_error: "Field admission_year must compose request body." })
@@ -106,7 +106,7 @@ export const MemberSearchRequestSchema = Zod.object({
     email: Zod
         .string()
         .email({ message: "Field email must be filled with valid email." })
-        .regex(/[A-Za-z]+@ufu\.br/i, { message: "Field email must be filled with an UFU institutional email." })
+        .regex(/[A-Za-z0-9]+@ufu\.br/i, { message: "Field email must be filled with an UFU institutional email." })
         .optional(),
 
     github_url: Zod
@@ -184,7 +184,7 @@ export const MemberUpdateRequestSchema = Zod.object({
     email: Zod
         .string()
         .email({ message: "Field email must be filled with valid email." })
-        .regex(/[A-Za-z]+@ufu\.br/i, { message: "Field email must be filled with an UFU institutional email." })
+        .regex(/[A-Za-z0-9]+@ufu\.br/i, { message: "Field email must be filled with an UFU institutional email." })
         .optional(),
 
     github_url: Zod
