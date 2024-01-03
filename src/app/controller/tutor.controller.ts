@@ -52,7 +52,7 @@ export class TutorsController {
 
       const tutor = await tutorService.register(data);
 
-      res.status(200).send({message: "✅ - Success - " + tutor.name + " - " + tutor.name  + " added to Tutors", data: tutor});
+      res.status(200).send({message: "✅ - Success - " + tutor.name + " added to Tutors", data: tutor});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
