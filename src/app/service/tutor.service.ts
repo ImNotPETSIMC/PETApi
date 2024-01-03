@@ -23,7 +23,7 @@ export default class TutorService {
                     linkedin_url: { contains: requestRef.linkedin_url },
                     instagram_url: {contains: requestRef.instagram_url },
                     lattes_url: { contains: requestRef.lattes_url },
-                    status: { contains: requestRef.status },
+                    status: { startsWith: requestRef.status },
                     place_of_birth: { contains: requestRef.place_of_birth }
                 }
             });

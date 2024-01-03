@@ -17,7 +17,7 @@ export default class ProjectService {
                     name: { contains: requestRef.name },
                     subtitle: { contains: requestRef.subtitle },
                     description: { contains: requestRef.description },
-                    status: { contains: requestRef.status },
+                    status: { startsWith: requestRef.status },
                     type: { contains: requestRef.type }
                 },
             })
