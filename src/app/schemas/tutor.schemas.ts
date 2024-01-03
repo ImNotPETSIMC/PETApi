@@ -45,7 +45,7 @@ export const TutorCreateRequestSchema = Zod.object({
 
     status: Zod
         .string({ required_error: "Field status must compose request body." })
-        .refine((str => (str == "Tutor" || str == "Ex-Tutor")), { message: "Status must be Membro or Ex-Membro." }),
+        .refine((str => (str == "Tutor" || str == "Ex-Tutor")), { message: "Status must be Tutor or Ex-Tutor." }),
 
     place_of_birth: Zod
         .string()
@@ -107,7 +107,7 @@ export const TutorSearchRequestSchema = Zod.object({
 
     status: Zod
         .string({ required_error: "Field status must compose request body." })
-        .refine((str => (str == "Tutor" || str == "Ex-Tutor")), { message: "Status must be Membro or Ex-Membro." })
+        .refine((str => (str == "Tutor" || str == "Ex-Tutor")), { message: "Status must be Tutor or Ex-Tutor." })
         .optional(),
 
     place_of_birth: Zod
@@ -162,7 +162,7 @@ export const TutorUpdateRequestSchema = Zod.object({
 
     status: Zod
         .string({ required_error: "Field status must compose request body." })
-        .refine((str => (str == "Tutor" || str == "Ex-Tutor")), { message: "Status must be Membro or Ex-Membro." })
+        .refine((str => (str == "Tutor" || str == "Ex-Tutor")), { message: "Status must be Tutor or Ex-Tutor." })
         .optional(),
 
     place_of_birth: Zod

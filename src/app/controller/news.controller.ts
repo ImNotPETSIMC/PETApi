@@ -52,7 +52,7 @@ export class NewsController {
 
       const news = await newsService.register(data);
 
-      res.status(200).send({message: "✅ - Success - " + news.name  + " added to Newss", data: news});
+      res.status(200).send({message: "✅ - Success - " + news.name  + " added to News", data: news});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
