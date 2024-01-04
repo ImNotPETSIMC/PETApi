@@ -8,63 +8,6 @@ import { MemberCreateRequestSchema, MemberSearchRequestSchema, MemberUpdateReque
 import { Prisma } from "@prisma/client";
 
 export default class MemberService {
-    public async search(member: Zod.infer<typeof MemberSearchRequestSchema>) {
-        const requestRef = member;
-
-        if (member.matricula) requestRef.matricula = normalizeString(member.matricula, "matricula");
-        if (member.name) requestRef.name = normalizeString(member.name, "name");
-
-        try {
-            const members = await prisma.member.findMany({
-                where: {
-                    matricula: { contains: requestRef.matricula },
-                    name: { contains: requestRef.name },
-                    admission_year: requestRef.admission_year,
-                    email: { contains: requestRef.email },
-                    github_url: { contains: requestRef.github_url },
-                    linkedin_url: { contains: requestRef.linkedin_url },
-                    instagram_url: { contains: requestRef.instagram_url },
-                    lattes_url: { contains: requestRef.lattes_url },
-                    status: { startsWith: requestRef.status },
-                    hobby: { contains: requestRef.hobby },
-                    place_of_birth: { contains: requestRef.place_of_birth },
-                    spotify_track_url: { contains: requestRef.spotify_track_url },
-                    course_curriculum: requestRef.course_curriculum,
-                }
-            });
-
-            return {
-                members
-            };
-        } catch (err) {
-            throw err;
-        }
-    };
-
-    public async remove(matricula: string) {
-        const requestRef = { matricula: normalizeString(matricula, "matricula") };
-
-        try {
-
-            const result = await prisma.member.delete({
-                where: {
-                    matricula: requestRef.matricula
-                }
-            });
-
-            return {
-                ...result
-            };
-
-        } catch (err) {
-            if (err instanceof Prisma.PrismaClientKnownRequestError) {
-                if (err.code == "P2025") throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found");
-            }
-
-            throw err;
-        }
-    };
-
     public async register(member: Zod.infer<typeof MemberCreateRequestSchema>) {
         try {
             const requestRef = member;
@@ -96,6 +39,39 @@ export default class MemberService {
                 throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
             }
 
+            throw err;
+        }
+    };
+
+    public async search(member: Zod.infer<typeof MemberSearchRequestSchema>) {
+        const requestRef = member;
+
+        if (member.matricula) requestRef.matricula = normalizeString(member.matricula, "matricula");
+        if (member.name) requestRef.name = normalizeString(member.name, "name");
+
+        try {
+            const members = await prisma.member.findMany({
+                where: {
+                    matricula: { contains: requestRef.matricula },
+                    name: { contains: requestRef.name },
+                    admission_year: requestRef.admission_year,
+                    email: { contains: requestRef.email },
+                    github_url: { contains: requestRef.github_url },
+                    linkedin_url: { contains: requestRef.linkedin_url },
+                    instagram_url: { contains: requestRef.instagram_url },
+                    lattes_url: { contains: requestRef.lattes_url },
+                    status: { startsWith: requestRef.status },
+                    hobby: { contains: requestRef.hobby },
+                    place_of_birth: { contains: requestRef.place_of_birth },
+                    spotify_track_url: { contains: requestRef.spotify_track_url },
+                    course_curriculum: requestRef.course_curriculum,
+                }
+            });
+
+            return {
+                members
+            };
+        } catch (err) {
             throw err;
         }
     };
@@ -133,6 +109,30 @@ export default class MemberService {
 
             if (err instanceof AxiosError) {
                 throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
+            }
+
+            throw err;
+        }
+    };
+
+    public async remove(matricula: string) {
+        const requestRef = { matricula: normalizeString(matricula, "matricula") };
+
+        try {
+
+            const result = await prisma.member.delete({
+                where: {
+                    matricula: requestRef.matricula
+                }
+            });
+
+            return {
+                ...result
+            };
+
+        } catch (err) {
+            if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                if (err.code == "P2025") throw new ValidationExceptionError(404, requestRef.matricula + " - Member not found");
             }
 
             throw err;

@@ -5,33 +5,6 @@ import { TutorRemoveRequestSchema, TutorCreateRequestSchema, TutorSearchRequestS
 import { handleZodIssues } from "../helper/handleZodIssues";
 
 export class TutorsController {
-  public async search(req: Request, res: Response) {
-    const tutorService = new TutorService();
-    
-    const result = TutorSearchRequestSchema.safeParse(req.query);
-
-    if (!result.success) {
-      res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
-      return;
-    }
-    
-    try {
-      const { data } = result;
-
-      const tutor = await tutorService.search(data);
-
-      res.status(200).send({data: tutor});
-
-    } catch (error) {
-      if (error instanceof ValidationExceptionError) {
-        res.status(error.code).send({ error: error.message, data: result.data });
-        return;
-      }
-
-      throw error;
-    }
-  }
-
   public async register(req: Request, res: Response) {
     const tutorService = new TutorService();
     
@@ -57,6 +30,33 @@ export class TutorsController {
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
         res.status(error.code).send({ error: error.message });
+        return;
+      }
+
+      throw error;
+    }
+  };
+
+  public async search(req: Request, res: Response) {
+    const tutorService = new TutorService();
+    
+    const result = TutorSearchRequestSchema.safeParse(req.query);
+
+    if (!result.success) {
+      res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
+      return;
+    }
+    
+    try {
+      const { data } = result;
+
+      const tutor = await tutorService.search(data);
+
+      res.status(200).send({data: tutor});
+
+    } catch (error) {
+      if (error instanceof ValidationExceptionError) {
+        res.status(error.code).send({ error: error.message, data: result.data });
         return;
       }
 

@@ -6,8 +6,8 @@ const newsRouter = Router();
 
 const newsController = new NewsController();
 
-newsRouter.get("/", newsController.search);
 newsRouter.post("/", authReq(['admin']), newsController.register);
+newsRouter.get("/", newsController.search);
 newsRouter.put("/", authReq(['admin']), newsController.update);
 newsRouter.delete("/", authReq(['admin']), newsController.remove);
 

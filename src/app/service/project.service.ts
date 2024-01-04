@@ -6,30 +6,6 @@ import { ProjectCreateRequestSchema, ProjectRemoveRequestSchema, ProjectSearchRe
 import Axios, { AxiosError } from "axios";
 
 export default class ProjectService {
-    public async search(project: Zod.infer<typeof ProjectSearchRequestSchema>) {
-        const requestRef = project;
-
-        if(project.name) requestRef.name = normalizeString(project.name, "name");
-
-        try {
-            const projects = await prisma.project.findMany({
-                where: {
-                    name: { contains: requestRef.name },
-                    subtitle: { contains: requestRef.subtitle },
-                    description: { contains: requestRef.description },
-                    status: { startsWith: requestRef.status },
-                    type: { contains: requestRef.type }
-                },
-            })
-
-            return {
-                projects
-            };
-        } catch(err) { 
-            throw err;
-        }
-    };
-
     public async register(project: Zod.infer<typeof ProjectCreateRequestSchema>) {
         const name = normalizeString(project.name, "name");
 
@@ -66,6 +42,30 @@ export default class ProjectService {
         }
     };
 
+    public async search(project: Zod.infer<typeof ProjectSearchRequestSchema>) {
+        const requestRef = project;
+
+        if(project.name) requestRef.name = normalizeString(project.name, "name");
+
+        try {
+            const projects = await prisma.project.findMany({
+                where: {
+                    name: { contains: requestRef.name },
+                    subtitle: { contains: requestRef.subtitle },
+                    description: { contains: requestRef.description },
+                    status: { startsWith: requestRef.status },
+                    type: { contains: requestRef.type }
+                },
+            })
+
+            return {
+                projects
+            };
+        } catch(err) { 
+            throw err;
+        }
+    };
+    
     public async update(project: Zod.infer<typeof ProjectUpdateRequestSchema>) {
         const requestRef = project;
         

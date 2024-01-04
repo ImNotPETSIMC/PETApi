@@ -8,58 +8,6 @@ import { TutorCreateRequestSchema, TutorRemoveRequestSchema, TutorSearchRequestS
 import { Prisma } from "@prisma/client";
 
 export default class TutorService {
-    public async search(member: Zod.infer<typeof TutorSearchRequestSchema>) {
-        const requestRef = member;
-
-        if(member.name) requestRef.name = normalizeString(member.name, "name");
-        
-        try {
-            const members = await prisma.tutor.findMany({
-                where : {
-                    name: { contains: requestRef.name },
-                    admission_year: requestRef.admission_year,
-                    email: { contains: requestRef.email },
-                    github_url: { contains: requestRef.github_url },
-                    linkedin_url: { contains: requestRef.linkedin_url },
-                    instagram_url: {contains: requestRef.instagram_url },
-                    lattes_url: { contains: requestRef.lattes_url },
-                    status: { startsWith: requestRef.status },
-                    place_of_birth: { contains: requestRef.place_of_birth }
-                }
-            });
-
-            return {
-                members
-            };
-        } catch(err) { 
-            throw err;
-        }
-    };
-    
-    public async remove(member: Zod.infer<typeof TutorRemoveRequestSchema>) {
-        const requestRef = { name: normalizeString(member.name, "name") };
-
-        try {
-            
-            const result = await prisma.tutor.delete({
-                where : {
-                    name: requestRef.name
-                }
-            });
-        
-            return {
-                ...result
-            };
-
-        } catch(err) { 
-            if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - Tutor not found"); 
-            }
-
-            throw err;
-        }
-    };
-
     public async register(member: Zod.infer<typeof TutorCreateRequestSchema>) {
         try {       
             const requestRef = member;
@@ -89,6 +37,34 @@ export default class TutorService {
                 throw new ValidationExceptionError(400, "Bad Request: Axios failed to retrieve photo.")
             }
 
+            throw err;
+        }
+    };
+
+    public async search(member: Zod.infer<typeof TutorSearchRequestSchema>) {
+        const requestRef = member;
+
+        if(member.name) requestRef.name = normalizeString(member.name, "name");
+        
+        try {
+            const members = await prisma.tutor.findMany({
+                where : {
+                    name: { contains: requestRef.name },
+                    admission_year: requestRef.admission_year,
+                    email: { contains: requestRef.email },
+                    github_url: { contains: requestRef.github_url },
+                    linkedin_url: { contains: requestRef.linkedin_url },
+                    instagram_url: {contains: requestRef.instagram_url },
+                    lattes_url: { contains: requestRef.lattes_url },
+                    status: { startsWith: requestRef.status },
+                    place_of_birth: { contains: requestRef.place_of_birth }
+                }
+            });
+
+            return {
+                members
+            };
+        } catch(err) { 
             throw err;
         }
     };
@@ -128,6 +104,30 @@ export default class TutorService {
             }
 
             throw err; 
+        }
+    };
+
+    public async remove(member: Zod.infer<typeof TutorRemoveRequestSchema>) {
+        const requestRef = { name: normalizeString(member.name, "name") };
+
+        try {
+            
+            const result = await prisma.tutor.delete({
+                where : {
+                    name: requestRef.name
+                }
+            });
+        
+            return {
+                ...result
+            };
+
+        } catch(err) { 
+            if(err instanceof Prisma.PrismaClientKnownRequestError) {
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - Tutor not found"); 
+            }
+
+            throw err;
         }
     };
 }
