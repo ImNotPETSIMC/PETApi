@@ -56,7 +56,7 @@ model Project {
 model News {
   id String @id @map("_id") @db.ObjectId
   name String @unique    
-  date String
+  date DateTime @default(now())
   content String
   photo String
 }

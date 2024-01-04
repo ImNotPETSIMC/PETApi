@@ -10,8 +10,10 @@ export const NewsCreateRequestSchema = Zod.object({
         .min(1, { message: "Field name must not be empty." }),
 
     date: Zod
-        .string({ required_error: "Field date must compose request body." })
-        .min(1, { message: "Field date must not be empty." }),
+        .coerce
+        .date({ invalid_type_error: "Field date must be filled with Date object or string."})
+        .min(new Date("2024-01-01"), { message: "Field date must be filled with Date older than 01-01-2024"})
+        .optional(),
 
     content: Zod
         .string({ required_error: "Field content must compose request body." })
@@ -32,7 +34,8 @@ export const NewsSearchRequestSchema = Zod.object({
         .optional(),
 
     date: Zod
-        .string()
+        .coerce
+        .date({ invalid_type_error: "Field date must be filled with Date object or string."})
         .optional(),
 
     content: Zod
@@ -48,11 +51,6 @@ export const NewsUpdateRequestSchema = Zod.object({
     name: Zod
         .string()
         .min(1, { message: "Field name must not be empty." })
-        .optional(),
-
-    date: Zod
-        .string()
-        .min(1, { message: "Field date must not be empty." })
         .optional(),
 
     content: Zod

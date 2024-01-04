@@ -17,7 +17,7 @@ export default class NewsService {
                     id: { contains: requestRef.id },
                     name: { contains: requestRef.name },
                     content: { contains: requestRef.content },
-                    date: { contains: requestRef.date }
+                    date: { gte: requestRef.date }
                 },
             })
 
