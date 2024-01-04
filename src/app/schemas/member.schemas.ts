@@ -65,10 +65,12 @@ export const MemberCreateRequestSchema = Zod.object({
 
     hobby: Zod
         .string()
+        .min(1, { message: "Field hobby must not be empty." })
         .optional(),
 
     place_of_birth: Zod
         .string()
+        .min(1, { message: "Field place_of_birth must not be empty." })
         .optional(),
 
     course_curriculum: Zod
