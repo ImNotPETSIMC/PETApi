@@ -60,3 +60,12 @@ model News {
   content String
   photo String
 }
+
+model Message {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String  
+  email String
+  content String
+  answered Boolean @default(false)
+  date DateTime @default(now())
+}

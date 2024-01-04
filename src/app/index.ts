@@ -5,6 +5,7 @@ import { memberRouter } from "./route/member.route";
 import { projectRouter } from "./route/project.route";
 import { tutorRouter } from "./route/tutor.route";
 import { newsRouter } from "./route/news.route";
+import { messageRouter } from "./route/message.route";
 
 class App {
   public app: express.Application;
@@ -26,6 +27,7 @@ class App {
     this.app.use("/tutor", tutorRouter);
     this.app.use("/project", projectRouter);
     this.app.use("/news", newsRouter);
+    this.app.use("/message", messageRouter);
   }
 }
 
