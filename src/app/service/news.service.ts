@@ -14,6 +14,7 @@ export default class NewsService {
         try {
             const news = await prisma.news.findMany({
                 where: {
+                    id: { contains: requestRef.id },
                     name: { contains: requestRef.name },
                     content: { contains: requestRef.content },
                     date: { contains: requestRef.date }
@@ -50,7 +51,7 @@ export default class NewsService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2002") throw new ValidationExceptionError(400, "Bad Request: " + requestRef.name + " - Já Cadastrado")
+                if(err.code == "P2002") throw new ValidationExceptionError(400, "Bad Request: " + requestRef.id + " - Já Cadastrado")
             } 
 
             if(err instanceof AxiosError) {
@@ -74,7 +75,7 @@ export default class NewsService {
 
             const result = await prisma.news.update({
                 where: {
-                    name: requestRef.name
+                    id: requestRef.id
                 },
                 data: {
                   ...requestRef
@@ -86,7 +87,7 @@ export default class NewsService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - News not found"); 
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.id + " - News not found"); 
             } 
 
             if(err instanceof AxiosError) {
@@ -103,7 +104,7 @@ export default class NewsService {
         try {
             const news = await prisma.news.delete({
                 where : {
-                    name: requestRef.name
+                    id: requestRef.id
                 }
             });
             
@@ -112,7 +113,7 @@ export default class NewsService {
             };
         } catch(err) { 
             if(err instanceof Prisma.PrismaClientKnownRequestError) {
-                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.name + " - News not found"); 
+                if(err.code == "P2025") throw new ValidationExceptionError(404, requestRef.id + " - News not found"); 
             } 
         
             throw err;

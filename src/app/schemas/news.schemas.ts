@@ -1,6 +1,10 @@
 import Zod from "zod";
 
 export const NewsCreateRequestSchema = Zod.object({
+    id: Zod
+        .string({ required_error: "Field id must compose request body." })
+        .min(1, { message: "Field id must not be empty." }),
+
     name: Zod
         .string({ required_error: "Field name must compose request body." })
         .min(1, { message: "Field name must not be empty." }),
@@ -19,6 +23,10 @@ export const NewsCreateRequestSchema = Zod.object({
 });
 
 export const NewsSearchRequestSchema = Zod.object({
+    id: Zod
+        .string()
+        .optional(),
+
     name: Zod
         .string()
         .optional(),
@@ -33,9 +41,14 @@ export const NewsSearchRequestSchema = Zod.object({
 });
 
 export const NewsUpdateRequestSchema = Zod.object({
+    id: Zod
+        .string({ required_error: "Field id must compose request body." })
+        .min(1, { message: "Field id must not be empty." }),
+
     name: Zod
-        .string({ required_error: "Field name must compose body" })
-        .min(1, { message: "Field name must not be empty." }),
+        .string()
+        .min(1, { message: "Field name must not be empty." })
+        .optional(),
 
     date: Zod
         .string()
@@ -54,7 +67,7 @@ export const NewsUpdateRequestSchema = Zod.object({
 });
 
 export const NewsRemoveRequestSchema = Zod.object({
-    name: Zod
-        .string()
-        .min(1, { message: "Field name must not be empty." })
+    id: Zod
+        .string({ required_error: "Field id must compose request body." })
+        .min(1, { message: "Field id must not be empty." }),
 });

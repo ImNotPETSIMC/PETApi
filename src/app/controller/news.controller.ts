@@ -52,7 +52,7 @@ export class NewsController {
 
       const news = await newsService.register(data);
 
-      res.status(200).send({message: "✅ - Success - " + news.name  + " added to News", data: news});
+      res.status(200).send({message: "✅ - Success - " + news.id + " - " + news.name  + " - added to News", data: news});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
@@ -84,7 +84,7 @@ export class NewsController {
 
       const news = await newsService.update(data);
 
-      res.status(200).send({message: "✅ - Success - " + news.name  + " updated.", data: news});
+      res.status(200).send({message: "✅ - Success - " + news.id  + " updated.", data: news});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
@@ -116,7 +116,7 @@ export class NewsController {
       
       const news = await newsService.remove(data);
   
-      res.status(200).send({message: "🗑️ - Remotion Completed - " + news.name  + " deleted.", data: news});
+      res.status(200).send({message: "🗑️ - Remotion Completed - " + news.id  + " deleted.", data: news});
 
     } catch (error) {
       if (error instanceof ValidationExceptionError) {
