@@ -54,7 +54,8 @@ model Project {
 }
 
 model News {
-  id String @id @map("_id") @db.ObjectId
+  id_ String @id @default(auto()) @map("_id") @db.ObjectId
+  id String @unique
   name String @unique    
   date DateTime @default(now())
   content String
