@@ -15,6 +15,11 @@ export const MessageCreateRequestSchema = Zod.object({
 });
 
 export const MessageSearchRequestSchema = Zod.object({
+    id: Zod
+        .string()
+        .length(24, { message: "Field ID must be exactly 24 characters long."})
+        .optional(),
+
     name: Zod
         .string()
         .optional(),
@@ -42,8 +47,8 @@ export const MessageSearchRequestSchema = Zod.object({
 export const MessageUpdateRequestSchema = Zod.object({
     id: Zod
         .string({ required_error: "Field id must compose request body." })
-        .min(1, { message: "Field id must not be empty." }),
-    
+        .length(24, { message: "Field ID must be exactly 24 characters long."}),
+
     name: Zod
         .string()
         .min(1, { message: "Field name must not be empty." })

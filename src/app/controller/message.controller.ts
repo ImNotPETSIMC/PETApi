@@ -40,14 +40,15 @@ export class MessageController {
   public async search(req: Request, res: Response) {
     const messageService = new MessageService();
 
-    const result = MessageSearchRequestSchema.safeParse(req.query);
-
-    if (!result.success) {
-      res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
-      return;
-    }
-
+    
     try {
+      const result = MessageSearchRequestSchema.safeParse(req.query);
+  
+      if (!result.success) {
+        res.status(422).send({ errors: result.error.issues.map(handleZodIssues) });
+        return;
+      }
+
       const { data } = result;
       
       const message = await messageService.search(data);

@@ -30,6 +30,7 @@ export default class MessageService {
         try {
             const messages = await prisma.message.findMany({
                 where: {
+                    id: requestRef.id,
                     name: { contains: requestRef.name },
                     email: { contains: requestRef.email },
                     content: { contains: requestRef.content },
@@ -37,6 +38,8 @@ export default class MessageService {
                     answered: requestRef.answered,
                 }
             });
+
+            console.log(messages)
 
             return {
                 messages
