@@ -39,8 +39,6 @@ export default class MessageService {
                 }
             });
 
-            console.log(messages)
-
             return {
                 messages
             };
@@ -71,13 +69,16 @@ export default class MessageService {
     };
 
     public async update(message: Zod.infer<typeof MessageUpdateRequestSchema>) {
+        const requestRef : any = { ...message };
+        delete requestRef.id;
+
         try {
             const result = await prisma.message.update({
                 where: {
                     id: message.id
                 },
                 data: {
-                    ...message
+                    ...requestRef
                 },
             })
 

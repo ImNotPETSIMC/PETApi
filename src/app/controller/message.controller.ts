@@ -39,7 +39,6 @@ export class MessageController {
 
   public async search(req: Request, res: Response) {
     const messageService = new MessageService();
-
     
     try {
       const result = MessageSearchRequestSchema.safeParse(req.query);
